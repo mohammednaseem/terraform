@@ -1,4 +1,10 @@
 provider "azurerm" {
+  
+  subscription_id = "__subscription_id__"
+  client_id       = "__client_id__"
+  client_secret   = "__client_secret__"
+  tenant_id       = "__tenant_id__"
+  
   features {}
 }
 
