@@ -3,14 +3,14 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "example" {
-  name     = "${var.prefix}-k8s-resources"
-  location = var.location
+  name     = "ping-k8s-resources"
+  location = "southeastasia"
 }
 
 resource "azurerm_virtual_network" "example" {
   name                = "${var.prefix}-network"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = "southeastasia"
+  resource_group_name = "ping"
   address_space       = ["10.1.0.0/16"]
 }
 
