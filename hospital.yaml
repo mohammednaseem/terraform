@@ -24,7 +24,9 @@ spec:
             memory: "64Mi"
             cpu: "100m"
         ports:
-        - containerPort: 80                
+        - containerPort: 80            
+      imagePullSecrets:
+      - name: topsecretregistryconnection        
 ---
 kind: Service
 apiVersion: v1
