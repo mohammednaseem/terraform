@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_virtual_network" "example" {
-  name                = "${var.prefix}-network"
+  name                = "ping-network"
   location            = "southeastasia"
   resource_group_name = "ping"
   address_space       = ["10.1.0.0/16"]
@@ -22,10 +22,10 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
-  name                = "${var.prefix}-k8s"
+  name                = "ping-k8s"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  dns_prefix          = "${var.prefix}-k8s"
+  dns_prefix          = "ping-k8s"
 
   default_node_pool {
     name           = "system"
