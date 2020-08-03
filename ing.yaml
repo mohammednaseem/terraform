@@ -1,0 +1,81 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ing-gateway
+  namespace: nm
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ing-gtwy-vs
+  namespace: nm
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - ing-gateway
+  http:
+  - name: "Healthcare"    
+    match:
+    - uri:
+        prefix: "/healthcare"
+    rewrite:
+      uri: "/Patient"
+    route:
+    - destination:
+        host: healthcare-api-service.nm.svc.cluster.local
+    corsPolicy:
+      allowOrigin:
+      - "*"
+      allowMethods:
+      - POST
+      - GET
+      allowHeaders:
+      - content-type
+      exposeHeaders:
+      - x-custom-header
+  - name: "Hospital"    
+    match:
+    - uri:       
+        prefix: "/hospital"
+    route:
+    - destination:
+        host: hospital-api-service.nm.svc.cluster.local 
+    corsPolicy:
+      allowOrigin:
+      - "^"
+      allowMethods:
+      - POST
+      - GET
+      - PATCH
+      - DELETE
+      allowHeaders:
+      - content-type
+      exposeHeaders:
+      - x-custom-header   
+  - name: "RegexTest"    
+    match:
+    - uri:
+        regex: "/."  # regex not working.. TODO:  fix later.
+    rewrite:
+      uri: "/Weatherforecast"
+    route:
+    - destination:
+        host: hospital-api-service.nm.svc.cluster.local    
+  - name: "Catch-all-route"  
+    rewrite:
+      uri: "/Patient"
+    route:
+    - destination:
+        host: healthcare-api-service.nm.svc.cluster.local
+    
